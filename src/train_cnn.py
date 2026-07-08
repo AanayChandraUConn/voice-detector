@@ -14,7 +14,7 @@ print(f"Loaded X shape: {X.shape}, y shape: {y.shape}")
 # Convert labels ("real"/"fake") into numbers (0/1) the model can use
 encoder = LabelEncoder()
 y_encoded = encoder.fit_transform(y)
-print(f"Label classes: {encoder.classes_}")  # shows which number maps to which label
+print(f"Label classes: {encoder.classes_}")
 
 # Add a "channel" dimension - CNNs expect images to have a color channel, even if grayscale
 X = X[..., np.newaxis]
@@ -64,3 +64,7 @@ history = model.fit(
 # Final evaluation
 test_loss, test_accuracy = model.evaluate(X_test, y_test)
 print(f"\nFinal test accuracy: {test_accuracy:.2%}")
+
+# Save the trained model
+model.save("models/cnn_model.keras")
+print("Model saved to models/cnn_model.keras")
