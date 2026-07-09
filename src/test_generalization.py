@@ -4,7 +4,7 @@ import os
 from tensorflow import keras
 
 TARGET_SHAPE = (128, 63)
-folder = "data/unseen_fake"
+folder = "data/unseen_fake_holdout"
 
 X_new = []
 filenames = []
