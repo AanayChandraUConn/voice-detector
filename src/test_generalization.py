@@ -4,17 +4,17 @@ import os
 from tensorflow import keras
 
 TARGET_SHAPE = (128, 63)
-folder = "data/unseen_fake_holdout"
+folder = "data/unseen_fake"  # clips from elevenlabs, model never trained on these
 
 X_new = []
 filenames = []
 
 files = os.listdir(folder)
-print(f"Processing {len(files)} unseen AI voice clips...")
+print(f"testing on {len(files)} unseen clips...")
 
 for filename in files:
     filepath = os.path.join(folder, filename)
-    
+
     try:
         audio, sr = librosa.load(filepath, sr=16000)
         spec = librosa.feature.melspectrogram(y=audio, sr=sr, n_mels=128)
@@ -30,22 +30,21 @@ for filename in files:
         filenames.append(filename)
 
     except Exception as e:
-        print(f"Skipped {filename} due to error: {e}")
+        print(f"skipped {filename}: {e}")
 
 X_new = np.array(X_new)
 X_new = X_new[..., np.newaxis]
 
-print(f"Shape of new data: {X_new.shape}")
+print(f"shape: {X_new.shape}")
 
-# Load the trained CNN and predict
 model = keras.models.load_model("models/cnn_model.keras")
 predictions_prob = model.predict(X_new)
 
-print("\nResults (remember: 0 = fake, 1 = real, since all these clips are ACTUALLY fake):")
+print("\nresults (these are ALL supposed to be fake):")
 for fname, prob in zip(filenames, predictions_prob):
     prob_value = float(prob[0])
     guess = "real" if prob_value > 0.5 else "fake"
-    print(f"{fname}: model guessed '{guess}' (confidence: {prob_value:.2f})")
+    print(f"{fname}: guessed '{guess}' ({prob_value:.2f})")
 
 correct = sum(1 for prob in predictions_prob if prob[0] <= 0.5)
-print(f"\nCorrectly identified as fake: {correct}/{len(predictions_prob)}")
+print(f"\ngot {correct}/{len(predictions_prob)} right")

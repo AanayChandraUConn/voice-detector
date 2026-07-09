@@ -3,12 +3,14 @@ import time
 
 api = kaggle.KaggleApi()
 api.authenticate()
+
 DATASET = "mohammedabdeldayem/the-fake-or-real-dataset"
 
 real_files = []
 fake_files = []
 page_token = None
 
+# kaggle only gives you like 20-100 files per page so gotta loop through
 while len(real_files) < 350 or len(fake_files) < 350:
     result = api.dataset_list_files(DATASET, page_token=page_token)
     for f in result.files:
@@ -17,7 +19,7 @@ while len(real_files) < 350 or len(fake_files) < 350:
         elif "for-2sec/for-2seconds/training/fake/" in f.name and len(fake_files) < 350:
             fake_files.append(f.name)
     page_token = result.nextPageToken
-    time.sleep(1)
+    time.sleep(1)  # kept getting rate limited without this lol
     if not page_token:
         break
 

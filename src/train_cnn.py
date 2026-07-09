@@ -5,29 +5,26 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
-# Load the spectrograms saved in the previous step
 X = np.load("data/spectrograms_X.npy")
 y = np.load("data/spectrograms_y.npy")
 
-print(f"Loaded X shape: {X.shape}, y shape: {y.shape}")
+print(f"Loaded X: {X.shape}, y: {y.shape}")
 
-# Convert labels ("real"/"fake") into numbers (0/1) the model can use
+# turn "real"/"fake" into 0/1 since the model needs numbers not text
 encoder = LabelEncoder()
 y_encoded = encoder.fit_transform(y)
-print(f"Label classes: {encoder.classes_}")
+print(f"classes: {encoder.classes_}")
 
-# Add a "channel" dimension - CNNs expect images to have a color channel, even if grayscale
+# CNN wants a channel dim even tho this is basically grayscale
 X = X[..., np.newaxis]
-print(f"X shape after adding channel dimension: {X.shape}")
+print(f"X after channel dim: {X.shape}")
 
-# Split into train/test, same 80/20 split as before
 X_train, X_test, y_train, y_test = train_test_split(
     X, y_encoded, test_size=0.2, random_state=42
 )
 
-print(f"Training on {len(X_train)} clips, testing on {len(X_test)} clips")
+print(f"train: {len(X_train)}, test: {len(X_test)}")
 
-# Build the CNN
 model = keras.Sequential([
     layers.Input(shape=(128, 63, 1)),
     layers.Conv2D(16, (3, 3), activation='relu'),
@@ -35,7 +32,7 @@ model = keras.Sequential([
     layers.Conv2D(32, (3, 3), activation='relu'),
     layers.MaxPooling2D((2, 2)),
     layers.Flatten(),
-    layers.Dropout(0.5),
+    layers.Dropout(0.5),  # added this bc it was overfitting hard before
     layers.Dense(64, activation='relu'),
     layers.Dropout(0.3),
     layers.Dense(1, activation='sigmoid')
@@ -45,14 +42,13 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 model.summary()
 
-# Stop training early if validation performance stops improving
+# stop early if it's not actually improving anymore
 early_stop = keras.callbacks.EarlyStopping(
     monitor='val_loss',
     patience=4,
     restore_best_weights=True
 )
 
-# Train it
 history = model.fit(
     X_train, y_train,
     epochs=30,
@@ -61,10 +57,8 @@ history = model.fit(
     callbacks=[early_stop]
 )
 
-# Final evaluation
 test_loss, test_accuracy = model.evaluate(X_test, y_test)
-print(f"\nFinal test accuracy: {test_accuracy:.2%}")
+print(f"\nFinal accuracy: {test_accuracy:.2%}")
 
-# Save the trained model
 model.save("models/cnn_model.keras")
-print("Model saved to models/cnn_model.keras")
+print("saved model to models/cnn_model.keras")
