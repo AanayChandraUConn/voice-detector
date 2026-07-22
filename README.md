@@ -1,4 +1,4 @@
-# AI Voice Detector 🎙️
+# AI Voice Detector
 
 Can you tell if a voice is real or AI-generated? Turns out it's harder than I thought - both for humans AND for the model I built.
 
