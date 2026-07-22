@@ -10,10 +10,10 @@ st.set_page_config(page_title="AI Voice Detector", layout="centered")
 
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap');
 
     html, body, .stApp, .stApp p, .stApp span, .stApp div, .stApp label, .stApp li {
-        font-family: 'Inter', -apple-system, sans-serif;
+        font-family: 'IBM Plex Sans', sans-serif;
     }
     [data-testid="stIconMaterial"] {
         font-family: 'Material Symbols Rounded' !important;
@@ -21,211 +21,213 @@ st.markdown("""
     [data-testid="stHeader"] {
         background: transparent;
     }
-    [data-testid="stToolbarActions"], #MainMenu {
+    [data-testid="stAppDeployButton"], [data-testid="stMainMenu"] {
         display: none;
     }
 
     .stApp {
-        background:
-            radial-gradient(ellipse 900px 500px at 10% -10%, rgba(139, 92, 246, 0.18), transparent 65%),
-            radial-gradient(ellipse 700px 400px at 100% 5%, rgba(56, 189, 248, 0.10), transparent 60%),
-            linear-gradient(180deg, #0b0b10 0%, #121218 100%);
+        background-color: #15120f;
+        background-image:
+            radial-gradient(ellipse 700px 400px at 85% -5%, rgba(201, 108, 70, 0.14), transparent 60%),
+            radial-gradient(rgba(237, 231, 220, 0.05) 1px, transparent 1px);
+        background-size: auto, 24px 24px;
     }
     .block-container {
-        max-width: 800px;
-        padding-top: 1.5rem;
+        max-width: 700px;
+        padding-top: 2.5rem;
         padding-bottom: 4rem;
     }
 
-    h1, h2, h3, .nav-word, .section-label {
-        font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .site-nav {
+    .doc-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        padding-bottom: 2rem;
+        align-items: baseline;
+        padding-bottom: 1rem;
         margin-bottom: 2.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px dashed rgba(237, 231, 220, 0.18);
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #9a9187;
     }
-    .nav-brand {
-        display: flex;
-        align-items: center;
-        gap: 0.65rem;
-    }
-    .nav-mark {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        border-radius: 9px;
-        background: linear-gradient(135deg, #8b5cf6, #6366f1);
-        color: #fff;
-        font-weight: 700;
-        font-size: 0.85rem;
-    }
-    .nav-word {
-        font-weight: 600;
-        font-size: 1.05rem;
-        color: #f0f0f5;
-    }
-    a.nav-link, a.nav-link:visited {
-        display: inline-block;
-        color: #d4d4dd !important;
+    a.doc-link, a.doc-link:visited {
+        color: #e0a377 !important;
         text-decoration: none !important;
-        font-size: 0.88rem;
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        padding: 0.4rem 0.95rem;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.04);
+    }
+    a.doc-link:hover {
+        text-decoration: underline !important;
     }
 
-    .hero h1 {
-        font-size: 2.5rem;
-        line-height: 1.18;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        color: #f5f5f7;
-        max-width: 620px;
-        margin-bottom: 1rem;
+    .eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #c9835a;
+        margin-bottom: 0.9rem;
     }
-    .hero h1 .accent {
-        background: linear-gradient(135deg, #a78bfa, #818cf8);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
+    h1.headline {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 2.7rem;
+        line-height: 1.12;
+        letter-spacing: -0.01em;
+        color: #ede7dc;
+        max-width: 560px;
+        margin-bottom: 1.1rem;
     }
-    .hero-sub {
-        font-size: 1.08rem;
-        color: #9c9ca8;
-        max-width: 540px;
-        line-height: 1.55;
-        margin-bottom: 1.5rem;
+    h1.headline em {
+        font-style: italic;
+        font-weight: 500;
+        color: #d97e51;
     }
-    .stat-row {
+    .dek {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: #a89d8f;
+        max-width: 520px;
+        margin-bottom: 1.75rem;
+    }
+
+    .spec-strip {
         display: flex;
-        gap: 0.6rem;
         flex-wrap: wrap;
-        margin-bottom: 2.75rem;
-    }
-    .stat-pill {
+        gap: 0 1.5rem;
+        font-family: 'IBM Plex Mono', monospace;
         font-size: 0.82rem;
-        color: #c9c9d6;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 0.4rem 0.85rem;
-        border-radius: 999px;
+        color: #8a8175;
+        padding: 0.9rem 0;
+        border-top: 1px dashed rgba(237, 231, 220, 0.18);
+        border-bottom: 1px dashed rgba(237, 231, 220, 0.18);
+        margin-bottom: 2.5rem;
+    }
+    .spec-strip b {
+        color: #cfc7b9;
+        font-weight: 600;
     }
 
     .section {
-        padding: 1.6rem 0;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 1.5rem 0;
+        border-top: 1px dashed rgba(237, 231, 220, 0.18);
     }
     .section-label {
+        font-family: 'IBM Plex Mono', monospace;
         font-size: 0.78rem;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #8b8b98;
-        margin-bottom: 0.6rem;
-        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: #8a8175;
+        margin-bottom: 0.7rem;
     }
     .section-body {
-        color: #b8b8c4;
-        line-height: 1.65;
-        max-width: 640px;
+        color: #beb5a7;
+        line-height: 1.7;
+        max-width: 600px;
+    }
+    .section-body::first-letter {
+        font-family: 'Fraunces', serif;
+        font-size: 2.6rem;
+        font-weight: 600;
+        color: #d97e51;
+        float: left;
+        line-height: 0.85;
+        padding-right: 0.35rem;
+        padding-top: 0.15rem;
     }
 
     [data-testid="stFileUploaderDropzone"] {
-        background-color: rgba(255, 255, 255, 0.03);
-        border: 1.5px dashed rgba(255, 255, 255, 0.15);
-        border-radius: 14px;
+        background-color: rgba(237, 231, 220, 0.03);
+        border: 1.5px dashed rgba(237, 231, 220, 0.2);
+        border-radius: 4px;
+    }
+    [data-testid="stFileUploaderDropzone"] * {
+        font-family: 'IBM Plex Mono', monospace !important;
+    }
+    [data-testid="stFileUploaderDropzone"] [data-testid="stIconMaterial"] {
+        font-family: 'Material Symbols Rounded' !important;
     }
     [data-testid="stAlertContainer"] {
-        background-color: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-left: 3px solid #8b5cf6;
-        border-radius: 12px;
+        background-color: rgba(237, 231, 220, 0.03);
+        border: 1px dashed rgba(237, 231, 220, 0.2);
+        border-left: 3px solid #d97e51;
+        border-radius: 4px;
+        font-family: 'IBM Plex Mono', monospace !important;
     }
     hr {
-        border-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(237, 231, 220, 0.15);
     }
 
     .result-card {
-        border-radius: 16px;
+        border-radius: 4px;
         padding: 1.75rem 2rem;
         margin-top: 1rem;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(237, 231, 220, 0.03);
+        border: 1px solid rgba(237, 231, 220, 0.12);
     }
-    .result-card.real { border-left: 3px solid #34d399; }
-    .result-card.fake { border-left: 3px solid #f87171; }
+    .result-card.real { border-left: 3px solid #9caf6b; }
+    .result-card.fake { border-left: 3px solid #c2594a; }
     .result-label {
-        font-size: 0.85rem;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.78rem;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
-        opacity: 0.6;
-        margin-bottom: 0.25rem;
+        letter-spacing: 0.1em;
+        color: #8a8175;
+        margin-bottom: 0.5rem;
     }
     .result-verdict {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 1.6rem;
-        font-weight: 700;
-        margin-bottom: 0.9rem;
+        font-family: 'Fraunces', serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 1.9rem;
+        margin-bottom: 1rem;
     }
-    .result-verdict.real { color: #34d399; }
-    .result-verdict.fake { color: #f87171; }
-    .confidence-track {
-        height: 8px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        overflow: hidden;
+    .result-verdict.real { color: #9caf6b; }
+    .result-verdict.fake { color: #c2594a; }
+    .confidence-bar {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 1rem;
+        letter-spacing: -0.05em;
+        margin-bottom: 0.4rem;
     }
-    .confidence-fill {
-        height: 100%;
-        border-radius: 999px;
-    }
-    .confidence-fill.real { background: linear-gradient(90deg, #10b981, #34d399); }
-    .confidence-fill.fake { background: linear-gradient(90deg, #ef4444, #f87171); }
+    .confidence-bar.real { color: #9caf6b; }
+    .confidence-bar.fake { color: #c2594a; }
     .confidence-pct {
-        margin-top: 0.5rem;
-        font-size: 0.95rem;
-        opacity: 0.8;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.88rem;
+        color: #8a8175;
     }
 
     .site-footer {
         margin-top: 3rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        color: #7a7a86;
-        font-size: 0.85rem;
+        padding-top: 1.25rem;
+        border-top: 1px dashed rgba(237, 231, 220, 0.18);
+        font-family: 'IBM Plex Mono', monospace;
+        color: #766d61;
+        font-size: 0.8rem;
     }
     .site-footer a, .site-footer a:visited {
-        color: #a78bfa !important;
+        color: #d97e51 !important;
         text-decoration: none !important;
-        border-bottom: 1px solid rgba(167, 139, 250, 0.4);
+        border-bottom: 1px solid rgba(217, 126, 81, 0.4);
     }
 </style>
 """, unsafe_allow_html=True)
 
 st.markdown("""
-<div class="site-nav">
-    <div class="nav-brand">
-        <span class="nav-mark">AI</span>
-        <span class="nav-word">Voice Detector</span>
-    </div>
-    <a class="nav-link" href="https://github.com/AanayChandraUConn/voice-detector" target="_blank">GitHub</a>
+<div class="doc-header">
+    <span>voice-detector / demo</span>
+    <a class="doc-link" href="https://github.com/AanayChandraUConn/voice-detector" target="_blank">source &#8594;</a>
 </div>
 
-<div class="hero">
-    <h1>Can you tell a <span class="accent">real</span> voice from an <span class="accent">AI</span> one?</h1>
-    <p class="hero-sub">Upload a short clip and a CNN trained on real vs. AI-generated speech will take a guess, spectrogram by spectrogram.</p>
-    <div class="stat-row">
-        <span class="stat-pill">92.14% test accuracy</span>
-        <span class="stat-pill">700 training clips</span>
-        <span class="stat-pill">CNN on mel spectrograms</span>
-    </div>
+<div class="eyebrow">CNN &middot; mel spectrograms &middot; binary classifier</div>
+<h1 class="headline">Real voice, or something <em>synthetic</em>?</h1>
+<p class="dek">Upload a short clip and this model will take a guess &mdash; trained on real human speech next to AI-generated speech, one spectrogram at a time.</p>
+
+<div class="spec-strip">
+    <span>ACCURACY <b>92.14%</b></span>
+    <span>CLIPS <b>700</b></span>
+    <span>DATASET <b>Fake-or-Real</b></span>
+    <span>MODEL <b>CNN</b></span>
 </div>
 
 <div class="section">
@@ -279,13 +281,15 @@ if uploaded_file is not None:
     else:
         verdict, pct, css_class = "Sounds AI-generated", 1 - confidence, "fake"
 
+    bar_length = 24
+    filled = round(pct * bar_length)
+    bar = "█" * filled + "░" * (bar_length - filled)
+
     st.markdown(f"""
     <div class="result-card {css_class}">
         <div class="result-label">Result</div>
         <div class="result-verdict {css_class}">{verdict}</div>
-        <div class="confidence-track">
-            <div class="confidence-fill {css_class}" style="width: {pct * 100:.1f}%;"></div>
-        </div>
+        <div class="confidence-bar {css_class}">{bar}</div>
         <div class="confidence-pct">{pct:.1%} confidence</div>
     </div>
     """, unsafe_allow_html=True)
@@ -297,6 +301,6 @@ else:
 
 st.markdown("""
 <div class="site-footer">
-    <p>Built by Aanay Chandra · <a href="https://github.com/AanayChandraUConn/voice-detector" target="_blank">GitHub repo</a></p>
+    <p>built by aanay chandra &middot; <a href="https://github.com/AanayChandraUConn/voice-detector" target="_blank">github repo</a></p>
 </div>
 """, unsafe_allow_html=True)
